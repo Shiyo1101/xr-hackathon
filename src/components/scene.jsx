@@ -3,7 +3,7 @@
 import { Suspense, useEffect, useState } from "react";
 import { Physics, usePlane, useBox } from "@react-three/cannon";
 import { AccumulativeShadows, RandomizedLight } from "@react-three/drei";
-import { Cursor, useDragConstraint } from "@/hooks/Drag";
+import { Cursor, useDragConstraint } from "@/hooks/drag";
 
 const Box = ({ color }) => {
   const [ref] = useBox(() => ({
