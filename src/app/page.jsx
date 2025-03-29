@@ -13,7 +13,7 @@ export default function Home() {
       <Canvas
         shadows
         className="aspect-video border border-gray-300"
-        camera={{ position: [0, 20, 20], fov: 50 }}
+        camera={{ position: [0, 50, 20], fov: 50 }}
       >
         <XR store={store}>
           <Scene />
