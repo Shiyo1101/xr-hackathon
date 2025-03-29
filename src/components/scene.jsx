@@ -2,7 +2,11 @@
 
 import { Suspense, useEffect, useState } from "react";
 import { Physics, usePlane, useBox } from "@react-three/cannon";
-import { AccumulativeShadows, RandomizedLight } from "@react-three/drei";
+import {
+  AccumulativeShadows,
+  RandomizedLight,
+  useGLTF,
+} from "@react-three/drei";
 import { Cursor, useDragConstraint } from "@/hooks/drag";
 
 const Box = ({ color }) => {
@@ -16,6 +20,7 @@ const Box = ({ color }) => {
     rotation: [Math.random(), Math.random(), Math.random()],
     args: [0.1, 0.1, 0.1],
   }));
+
   const bind = useDragConstraint(ref);
 
   return (
@@ -96,24 +101,55 @@ const Shadows = () => {
   );
 };
 
+const TargetModel = ({ position }) => {
+  const { scene } = useGLTF("/models/glasses.glb");
+  const [ref] = useBox(() => ({
+    mass: 1,
+    position,
+    args: [0.1, 0.1, 0.1],
+  }));
+
+  const bind = useDragConstraint(ref);
+
+  return (
+    <mesh ref={ref} {...bind} castShadow>
+      <primitive object={scene} scale={0.01} />
+    </mesh>
+  );
+};
+
 const Scene = () => {
-  const [boxes, setBoxes] = useState([]);
+  // const [boxes, setBoxes] = useState([]);
+  const [targets, setTargets] = useState([]);
 
   useEffect(() => {
-    const colors = [
-      "#ff6b6b",
-      "#4ecdc4",
-      "#45aaf2",
-      "#fed330",
-      "#fd9644",
-      "#a55eea",
-    ];
+    // const colors = [
+    //   "#ff6b6b",
+    //   "#4ecdc4",
+    //   "#45aaf2",
+    //   "#fed330",
+    //   "#fd9644",
+    //   "#a55eea",
+    // ];
 
-    setBoxes(
-      Array.from({ length: 20 }, (_, i) => (
-        <Box
+    // setBoxes(
+    //   Array.from({ length: 25 }, (_, i) => (
+    //     <Box
+    //       key={i}
+    //       color={colors[Math.floor(Math.random() * colors.length)]}
+    //     />
+    //   ))
+    // );
+
+    setTargets(
+      Array.from({ length: 15 }, (_, i) => (
+        <TargetModel
           key={i}
-          color={colors[Math.floor(Math.random() * colors.length)]}
+          position={[
+            (Math.random() - 0.5) * 0.5,
+            (Math.random() + 5) * 0.5,
+            (Math.random() - 0.5) * 0.5,
+          ]}
         />
       ))
     );
@@ -128,7 +164,7 @@ const Scene = () => {
         <Physics>
           <Cursor />
           <Plane />
-          {boxes}
+          {targets}
         </Physics>
       </Suspense>
     </>
