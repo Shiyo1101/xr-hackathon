@@ -5,7 +5,7 @@ import { Physics, usePlane, useBox } from "@react-three/cannon";
 import { AccumulativeShadows, RandomizedLight } from "@react-three/drei";
 import { Cursor, useDragConstraint } from "@/hooks/Drag";
 
-function Box({ color }) {
+const Box = ({ color }) => {
   const [ref] = useBox(() => ({
     mass: 1,
     position: [
@@ -24,9 +24,9 @@ function Box({ color }) {
       <meshStandardMaterial color={color} roughness={0.5} metalness={0.5} />
     </mesh>
   );
-}
+};
 
-function Plane() {
+const Plane = () => {
   const [ref] = usePlane(() => ({
     rotation: [-Math.PI / 2, 0, 0],
     position: [0, 1, 0],
@@ -37,9 +37,9 @@ function Plane() {
       <meshStandardMaterial color="#f0f0f0" roughness={0.4} metalness={0.3} />
     </mesh>
   );
-}
+};
 
-function Lights() {
+const Lights = () => {
   return (
     <>
       <ambientLight intensity={0.8} />
@@ -72,9 +72,9 @@ function Lights() {
       <pointLight position={[0, 20, 0]} intensity={0.5} />
     </>
   );
-}
+};
 
-function Shadows() {
+const Shadows = () => {
   return (
     <AccumulativeShadows
       temporal
@@ -94,9 +94,9 @@ function Shadows() {
       />
     </AccumulativeShadows>
   );
-}
+};
 
-export default function Scene() {
+const Scene = () => {
   const [boxes, setBoxes] = useState([]);
 
   useEffect(() => {
@@ -133,4 +133,6 @@ export default function Scene() {
       </Suspense>
     </>
   );
-}
+};
+
+export default Scene;

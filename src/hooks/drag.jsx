@@ -8,7 +8,7 @@ export const cursor = createRef();
 let grabbingPointerId = undefined;
 const grabbedPosition = new Vector3();
 
-export function useDragConstraint(child) {
+export const useDragConstraint = (child) => {
   const [, , api] = usePointToPointConstraint(cursor, child, {
     pivotA: [0, 0, 0],
     pivotB: [0, 0, 0],
@@ -51,9 +51,9 @@ export function useDragConstraint(child) {
     grabbedPosition.copy(e.point);
   }, []);
   return { onPointerUp, onPointerMove, onPointerDown };
-}
+};
 
-export function Cursor() {
+export const Cursor = () => {
   const [, api] = useSphere(
     () => ({ collisionFilterMask: 0, type: "Kinematic", mass: 0, args: [0.5] }),
     cursor
@@ -67,4 +67,4 @@ export function Cursor() {
   });
 
   return null;
-}
+};
