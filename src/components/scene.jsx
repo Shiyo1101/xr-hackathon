@@ -18,15 +18,31 @@ const Box = ({ color }) => {
       (Math.random() - 0.5) * 0.5,
     ],
     rotation: [Math.random(), Math.random(), Math.random()],
-    args: [0.1, 0.1, 0.1],
+    args: [0.1, 0.1, 0.1], // このargsは物理エンジン用なのでそのまま
   }));
 
   const bind = useDragConstraint(ref);
 
   return (
     <mesh ref={ref} {...bind} castShadow>
-      <boxGeometry args={[0.1, 0.1, 0.1]} />
-      <meshStandardMaterial color={color} roughness={0.5} metalness={0.5} />
+      {/* トゲトゲした形状に変更 */}
+      <icosahedronGeometry args={[0.1, 2]} /> {/* 半径0.1、詳細レベル2 */}
+      <meshStandardMaterial color={color} roughness={0.3} metalness={0.8} />
+    </mesh>
+  );
+};
+
+const Target = () => {
+  const [ref] = usePlane(() => ({
+    rotation: [0, 0, 0],
+    position: [0, 2, -2],
+    name: "target", // 的の名前を設定
+  }));
+
+  return (
+    <mesh ref={ref} receiveShadow>
+      <circleGeometry args={[0.5, 32]} /> {/* 半径0.5、32分割の円形 */}
+      <meshStandardMaterial color="#ff0000" roughness={0.5} metalness={0.2} />
     </mesh>
   );
 };
@@ -119,6 +135,11 @@ const Scene = () => {
         <Box
           key={i}
           color={colors[Math.floor(Math.random() * colors.length)]}
+          onHit={(ref) => {
+            // ボールを的に固定化
+            ref.current.api.mass.set(0);
+            ref.current.api.velocity.set(0, 0, 0);
+          }}
         />
       ))
     );
@@ -133,6 +154,7 @@ const Scene = () => {
         <Physics>
           <Cursor />
           <Plane />
+          <Target /> {/* 的を追加 */}
           {boxes}
         </Physics>
       </Suspense>
