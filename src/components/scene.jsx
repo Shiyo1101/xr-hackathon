@@ -9,8 +9,8 @@ import {
 } from "@react-three/drei";
 import { Cursor, useDragConstraint } from "@/hooks/drag";
 
-const Box = ({ color }) => {
-  const [ref] = useBox(() => ({
+const Box = ({ color, onHit }) => {
+  const [ref, api] = useBox(() => ({
     mass: 1,
     position: [
       (Math.random() - 0.5) * 0.5,
@@ -23,9 +23,26 @@ const Box = ({ color }) => {
 
   const bind = useDragConstraint(ref);
 
+  useEffect(() => {
+    const unsubscribe = api.velocity.subscribe((velocity) => {
+      if (velocity.every((v) => Math.abs(v) < 0.01)) {
+        api.mass.set(0); // ボールを固定化
+      }
+    });
+    return () => unsubscribe();
+  }, [api]);
+
   return (
-    <mesh ref={ref} {...bind} castShadow>
-      {/* トゲトゲした形状に変更 */}
+    <mesh
+      ref={ref}
+      {...bind}
+      castShadow
+      onCollide={(e) => {
+        if (e.body.name === "target") {
+          onHit(ref); // 的に当たったら固定化
+        }
+      }}
+    >
       <icosahedronGeometry args={[0.1, 2]} /> {/* 半径0.1、詳細レベル2 */}
       <meshStandardMaterial color={color} roughness={0.3} metalness={0.8} />
     </mesh>
