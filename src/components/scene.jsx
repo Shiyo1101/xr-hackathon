@@ -110,7 +110,7 @@ const Scene = () => {
     ];
 
     setBoxes(
-      Array.from({ length: 50 }, (_, i) => (
+      Array.from({ length: 20 }, (_, i) => (
         <Box
           key={i}
           color={colors[Math.floor(Math.random() * colors.length)]}
