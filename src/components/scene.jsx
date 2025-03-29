@@ -101,55 +101,24 @@ const Shadows = () => {
   );
 };
 
-const TargetModel = ({ position }) => {
-  const { scene } = useGLTF("/models/glasses.glb");
-  const [ref] = useBox(() => ({
-    mass: 1,
-    position,
-    args: [0.1, 0.1, 0.1],
-  }));
-
-  const bind = useDragConstraint(ref);
-
-  return (
-    <mesh ref={ref} {...bind} castShadow>
-      <primitive object={scene} scale={0.01} />
-    </mesh>
-  );
-};
-
 const Scene = () => {
-  // const [boxes, setBoxes] = useState([]);
-  const [targets, setTargets] = useState([]);
+  const [boxes, setBoxes] = useState([]);
 
   useEffect(() => {
-    // const colors = [
-    //   "#ff6b6b",
-    //   "#4ecdc4",
-    //   "#45aaf2",
-    //   "#fed330",
-    //   "#fd9644",
-    //   "#a55eea",
-    // ];
+    const colors = [
+      "#ff6b6b",
+      "#4ecdc4",
+      "#45aaf2",
+      "#fed330",
+      "#fd9644",
+      "#a55eea",
+    ];
 
-    // setBoxes(
-    //   Array.from({ length: 25 }, (_, i) => (
-    //     <Box
-    //       key={i}
-    //       color={colors[Math.floor(Math.random() * colors.length)]}
-    //     />
-    //   ))
-    // );
-
-    setTargets(
-      Array.from({ length: 15 }, (_, i) => (
-        <TargetModel
+    setBoxes(
+      Array.from({ length: 25 }, (_, i) => (
+        <Box
           key={i}
-          position={[
-            (Math.random() - 0.5) * 0.5,
-            (Math.random() + 5) * 0.5,
-            (Math.random() - 0.5) * 0.5,
-          ]}
+          color={colors[Math.floor(Math.random() * colors.length)]}
         />
       ))
     );
@@ -164,7 +133,7 @@ const Scene = () => {
         <Physics>
           <Cursor />
           <Plane />
-          {targets}
+          {boxes}
         </Physics>
       </Suspense>
     </>
